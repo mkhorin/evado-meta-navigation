@@ -1,0 +1,20 @@
+{
+  "name": "evado-meta-navigation",
+  "version": "0.1.0",
+  "description": "Evado application metadata processing component",
+  "author": {
+    "name": "Maxim Khorin",
+    "email": "maksimovichu@gmail.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/mkhorin/evado-meta-navigation",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mkhorin/evado-meta-navigation.git"
+  },
+  "dependencies": {
+  },
+  "scripts": {
+    "test": "mocha test/run --recursive"
+  }
+}
