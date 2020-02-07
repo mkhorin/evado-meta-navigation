@@ -1,7 +1,5 @@
-# Evado navigation metadata
+# Evado Navigation Metadata
 
-## Evado application metadata processing component
+### Evado application metadata processing component
 
-### Evado Kit
-
-https://github.com/mkhorin/evado
+[Evado Kit](https://github.com/mkhorin/evado)
