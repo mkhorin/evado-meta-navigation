@@ -1,7 +1,7 @@
 {
   "name": "evado-meta-navigation",
-  "version": "1.1.0",
-  "description": "Evado application metadata processing component",
+  "version": "1.2.0",
+  "description": "Evado Platform metadata processing component",
   "author": {
     "name": "Maxim Khorin",
     "email": "maksimovichu@gmail.com"

@@ -50,7 +50,7 @@ module.exports = class Node extends Base {
     }
 
     getOption (key, defaults) {
-        return NestedValueHelper.get(key, this.options, defaults);
+        return NestedHelper.get(key, this.options, defaults);
     }
 
     getParent () {
@@ -76,7 +76,7 @@ module.exports = class Node extends Base {
     createTitle () {
         return MetaHelper.isSystemName(this.name)
             ? this.data.label || this.name
-            : MetaHelper.createTitle(this);
+            : MetaHelper.createLabel(this);
     }
 
     build () {
@@ -99,6 +99,6 @@ module.exports = class Node extends Base {
 };
 
 const CommonHelper = require('areto/helper/CommonHelper');
-const NestedValueHelper = require('areto/helper/NestedValueHelper');
+const NestedHelper = require('areto/helper/NestedHelper');
 const ObjectHelper = require('areto/helper/ObjectHelper');
 const MetaHelper = require('../helper/MetaHelper');

@@ -24,7 +24,7 @@ module.exports = class Section extends Base {
         this.name = this.data.name;
         this.id = this.name;
         this.nodes = new DataMap;
-        this.title = MetaHelper.createTitle(this);
+        this.title = MetaHelper.createLabel(this);
         this.setBaseName();
         this.translationKey = `nav.${this.baseName}`;
     }

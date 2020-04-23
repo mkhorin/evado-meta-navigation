@@ -26,9 +26,3 @@ describe('Section', ()=> {
         expect(Section.compareOrder(a2, c2)).to.eql(0);
     });
 });
-/*
-return a.data.orderNumber && b.data.orderNumber
-    ? (a.data.orderNumber - b.data.orderNumber)
-    : (a.data.label || a.data.name).localeCompare(b.data.label || b.data.name);
-
-    */
