@@ -34,12 +34,12 @@ module.exports = class BaseSource extends Base {
     createServiceNavigation () {
         this.mainSection = this.addSection('main');
         if (this.isEnableServiceNavigation()) {
-            this.createClassServiceNavigation(this.meta.hub.get('document'));
+            this.createBaseServiceNavigation(this.meta.hub.get('base'));
             this.createReportServiceNavigation(this.meta.hub.get('report'));
         }
     }
 
-    createClassServiceNavigation (meta) {
+    createBaseServiceNavigation (meta) {
         if (meta) {
             this.createModelServiceNavigation('_classes', meta.classes.map(item => ({
                 name: item.getName(),

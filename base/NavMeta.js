@@ -3,7 +3,7 @@
  */
 'use strict';
 
-const Base = require('evado/component/meta/BaseMetaModel');
+const Base = require('evado/component/meta/MetaModel');
 
 module.exports = class NavMeta extends Base {
 
