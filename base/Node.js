@@ -34,7 +34,8 @@ module.exports = class Node extends Base {
         this.options = this.data.options || {};
         this.system = this.data.system;
         this.translationKey = `${this.section.translationKey}.${this.name}`;
-        this.title = this.createTitle();
+        this.label = this.createLabel();
+        this.title = this.label;
     }
 
     isSystem () {
@@ -73,7 +74,7 @@ module.exports = class Node extends Base {
         return this.id;
     }
 
-    createTitle () {
+    createLabel () {
         return MetaHelper.isSystemName(this.name)
             ? this.data.label || this.name
             : MetaHelper.createLabel(this);

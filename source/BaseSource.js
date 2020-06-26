@@ -73,20 +73,29 @@ module.exports = class BaseSource extends Base {
     }
 
     addSectionServiceNodes (section, parent, nodes) {
-        this._data.nodes.unshift({
+        this._data.nodes.unshift(this.getSectionData({
             name: parent,
             section
-        });
+        }));
         for (let node of nodes) {
-            node = {
-                ...node,
-                section,
-                parent,
-                system: true
-            };
+            node = this.getNodeData({...node, section, parent});
             node.name = `${parent}-${node.name}`;
             this._data.nodes.push(node);
         }
+    }
+
+    getSectionData (data) {
+        return {
+            options: {separatorAfter: true},
+            ...data
+        };
+    }
+
+    getNodeData (data) {
+        return {
+            system: true,
+            ...data
+        };
     }
 };
 
