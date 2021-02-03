@@ -10,7 +10,9 @@ module.exports = class NavMeta extends Base {
     constructor (config) {
         super({
             name: 'navigation',
-            source: {Class: require('../source/FileSource')},
+            source: {
+                Class: require('../source/FileSource')
+            },
             enableServiceNavigation: false,
             ...config
         });
@@ -24,10 +26,13 @@ module.exports = class NavMeta extends Base {
     }
 
     getNode (id) {
-        return this.nodeMap.hasOwnProperty(id) ? this.nodeMap[id] : null;
+        return ObjectHelper.getValue(id, this.nodeMap);
     }
 
-    afterLoad () {  // after load all meta models
+    /**
+     * After load all meta models
+     */
+    afterLoad () {        
         this.source.createServiceNavigation();
         this.createSections();
         this.createNodes();
@@ -75,4 +80,5 @@ module.exports = class NavMeta extends Base {
 };
 
 const DataMap = require('areto/base/DataMap');
+const ObjectHelper = require('areto/helper/ObjectHelper');
 const Section = require('./Section');

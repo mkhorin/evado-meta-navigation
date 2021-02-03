@@ -90,7 +90,7 @@ module.exports = class Node extends Base {
             }
         }
         if (!this.system) {
-            this.system = this.parent && this.parent.isSystem();
+            this.system = this.parent?.isSystem();
         }
     }
 
