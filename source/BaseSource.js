@@ -86,7 +86,6 @@ module.exports = class BaseSource extends Base {
 
     getSectionData (data) {
         return {
-            options: {separatorAfter: true},
             ...data
         };
     }
