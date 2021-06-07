@@ -85,8 +85,20 @@ module.exports = class Section extends Base {
         }
         this.children.sort(Node.compareOrder);
     }
+
+    search (value) {
+        const regex = new RegExp(EscapeHelper.escapeRegex(value), 'i');
+        const result = [];
+        for (const node of this.nodes) {
+            if (!node.children && regex.test(node.label)) {
+                result.push(node);
+            }
+        }
+        return result;
+    }
 };
 
 const DataMap = require('areto/base/DataMap');
+const EscapeHelper = require('areto/helper/EscapeHelper');
 const MetaHelper = require('../helper/MetaHelper');
 const Node = require('./Node');
