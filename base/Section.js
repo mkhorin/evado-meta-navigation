@@ -90,7 +90,7 @@ module.exports = class Section extends Base {
         const regex = new RegExp(EscapeHelper.escapeRegex(value), 'i');
         const result = [];
         for (const node of this.nodes) {
-            if (!node.children && regex.test(node.label)) {
+            if (node.isNode() && regex.test(node.label)) {
                 result.push(node);
             }
         }

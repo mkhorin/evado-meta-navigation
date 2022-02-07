@@ -42,6 +42,10 @@ module.exports = class Node extends Base {
         return this.system;
     }
 
+    isNode () {
+        return !this.data.type;
+    }
+
     isContainer () {
         return this.data.type === 'container';
     }
