@@ -42,6 +42,18 @@ module.exports = class Node extends Base {
         return this.system;
     }
 
+    isContainer () {
+        return this.data.type === 'container';
+    }
+
+    isDivider () {
+        return this.data.type === 'divider';
+    }
+
+    isHeader () {
+        return this.data.type === 'header';
+    }
+
     getName () {
         return this.name;
     }
