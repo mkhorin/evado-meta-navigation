@@ -13,7 +13,7 @@ module.exports = class BaseSource extends Base {
             nodes: []
         };
     }
-    
+
     isEnableServiceNavigation () {
         return this.meta.enableServiceNavigation;
     }

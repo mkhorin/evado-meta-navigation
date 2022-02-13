@@ -32,7 +32,7 @@ module.exports = class NavMeta extends Base {
     /**
      * After load all meta models
      */
-    afterLoad () {        
+    afterLoad () {
         this.source.createServiceNavigation();
         this.createSections();
         this.createNodes();
