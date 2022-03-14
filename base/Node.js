@@ -86,6 +86,16 @@ module.exports = class Node extends Base {
         return this._parents;
     }
 
+    getParentsChildren () {
+        if (!this._parentsChildren) {
+            this._parentsChildren = [];
+            for (const parent of this.getParents()) {
+                this._parentsChildren.push(...parent.children);
+            }
+        }
+        return this._parentsChildren;
+    }
+
     toString () {
         return this.id;
     }
