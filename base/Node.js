@@ -35,7 +35,8 @@ module.exports = class Node extends Base {
         this.system = this.data.system;
         this.translationKey = `${this.section.translationKey}.${this.name}`;
         this.label = this.createLabel();
-        this.title = this.label;
+        this.description = this.data.description;
+        this.opened = this.data.opened;
     }
 
     isSystem () {
@@ -60,10 +61,6 @@ module.exports = class Node extends Base {
 
     getName () {
         return this.name;
-    }
-
-    getTitle () {
-        return this.title;
     }
 
     getOption (key, defaults) {
@@ -101,12 +98,22 @@ module.exports = class Node extends Base {
     }
 
     createLabel () {
+        if (this.data.label) {
+            return this.data.label;
+        }
         return MetaHelper.isSystemName(this.name)
-            ? this.data.label || this.name
-            : MetaHelper.createLabel(this);
+            ? this.name
+            : StringHelper.generateLabel(this.name);
     }
 
     build () {
+        this.resolveParent();
+        this.system = this.system || this.parent?.isSystem();
+        this.createFilter();
+        this.createProvider();
+    }
+
+    resolveParent () {
         if (this.data.parent) {
             this.parent = this.section.getNode(this.data.parent);
             if (this.parent) {
@@ -115,17 +122,44 @@ module.exports = class Node extends Base {
                 this.log('error', `Parent item not found`);
             }
         }
-        if (!this.system) {
-            this.system = this.parent?.isSystem();
+    }
+
+    createFilter () {
+        try {
+            this.filter = ObjectFilter.create(this.options.filter, this);
+        } catch (err) {
+            this.log('error', 'Invalid filter', err);
         }
     }
 
+    applyFilter (query) {
+        return this.filter?.apply(query)
+    }
+
+    createProvider () {
+        try {
+            this.provider = BaseProvider.create(this.options.provider, this);
+        } catch (err) {
+            this.log('error', 'Invalid provider', err);
+        }
+    }
+
+    serializeUrlParams () {
+        return this.options.urlParams
+            ? `&${UrlHelper.serialize(this.options.urlParams, true)}`
+            : '';
+    }
+
     log () {
-        CommonHelper.log(this.section, `${this.constructor.name}: ${this.id}`, ...arguments);
+        CommonHelper.log(this.section.meta, `${this.constructor.name}: ${this.id}`, ...arguments);
     }
 };
 
 const CommonHelper = require('areto/helper/CommonHelper');
 const NestedHelper = require('areto/helper/NestedHelper');
 const ObjectHelper = require('areto/helper/ObjectHelper');
+const StringHelper = require('areto/helper/StringHelper');
 const MetaHelper = require('../helper/MetaHelper');
+const ObjectFilter = require('../filter/ObjectFilter');
+const BaseProvider = require('../provider/BaseProvider');
+const UrlHelper = require('areto/helper/UrlHelper');

@@ -25,7 +25,7 @@ module.exports = class Section extends Base {
         this.id = this.name;
         this.nodes = new DataMap;
         this.label = MetaHelper.createLabel(this);
-        this.title = this.label;
+        this.description = this.data.description;
         this.setBaseName();
         this.translationKey = `nav.${this.baseName}`;
     }
@@ -40,10 +40,6 @@ module.exports = class Section extends Base {
 
     getName () {
         return this.name;
-    }
-
-    getTitle () {
-        return this.title;
     }
 
     getNode (name) {
@@ -82,8 +78,23 @@ module.exports = class Section extends Base {
             if (node.children) {
                 node.children.sort(Node.compareOrder);
             }
+            if (node.provider) {
+                this.hasDynamicNode = true;
+            }
         }
         this.children.sort(Node.compareOrder);
+    }
+
+    async getDynamicNodes (items) {
+        const result = {};
+        if (this.hasDynamicNode) {
+            for (const item of items) {
+                if (item.provider) {
+                    result[item.id] = await item.provider.resolveNodes();
+                }
+            }
+        }
+        return result;
     }
 
     search (value) {
@@ -96,8 +107,13 @@ module.exports = class Section extends Base {
         }
         return result;
     }
+
+    log () {
+        CommonHelper.log(this.meta, `${this.constructor.name}: ${this.id}`, ...arguments);
+    }
 };
 
+const CommonHelper = require('areto/helper/CommonHelper');
 const DataMap = require('areto/base/DataMap');
 const EscapeHelper = require('areto/helper/EscapeHelper');
 const MetaHelper = require('../helper/MetaHelper');
