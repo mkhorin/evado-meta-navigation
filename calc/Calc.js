@@ -10,6 +10,7 @@
  * ["$duration", "value", "seconds", "humanize"]
  * ["$now"] - Current datetime
  * ["$number"] - Cast to number
+ * ["$param", "paramName"] - Get value from request parameters
  * ["$raw", "$user"] - Output as is
  * ["$round", ".attrName", precision]
  * ["$placeholder", "placeholder", "value"] - Set placeholder if value is empty
