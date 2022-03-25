@@ -36,7 +36,7 @@ module.exports = class BaseProvider extends Base {
     async resolveNode (params) {
         const id = params[DynamicNode.OBJECT_ID_PARAM];
         const data = await this.find().byId(id).one();
-        return this.createNode(data);
+        return data && this.createNode(data);
     }
 
     async resolveNodes () {
