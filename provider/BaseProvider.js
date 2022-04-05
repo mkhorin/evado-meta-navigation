@@ -34,13 +34,17 @@ module.exports = class BaseProvider extends Base {
     }
 
     async resolveNode (params) {
-        const id = params[DynamicNode.OBJECT_ID_PARAM];
-        const data = await this.find().byId(id).one();
-        return data && this.createNode(data);
+        const id = params?.request[DynamicNode.OBJECT_ID_PARAM];
+        const query = await this.resolveQuery(this.find(), params);
+        const data = await query.byId(id).one();
+        if (data) {
+            return this.createNode(data);
+        }
     }
 
-    async resolveNodes () {
-        const items = await this.find().all();
+    async resolveNodes (params) {
+        const query = await this.resolveQuery(this.find(), params);
+        const items = await query.all();
         return items.map(this.createNode, this);
     }
 
@@ -53,6 +57,27 @@ module.exports = class BaseProvider extends Base {
         return this.data.view
             ? cls.getView(this.data.view)
             : cls;
+    }
+
+    async resolveQuery (query, params) {
+        const rbac = params?.controller?.module.getRbac();
+        if (!rbac) {
+            return query;
+        }
+        const access = await this.resolveAccess(rbac, query.view, params);
+        if (!access.canRead()) {
+            query.and(['false']);
+        }
+        await access.assignObjectFilter(query);
+        return query;
+    }
+
+    resolveAccess (rbac, view, params) {
+        return rbac.resolveAccess(params.controller.user.assignments, {
+            targetType: rbac.TARGET_VIEW,
+            target: view,
+            actions: [rbac.READ]
+        }, params);
     }
 
     createNode (data) {

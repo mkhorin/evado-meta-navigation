@@ -85,12 +85,12 @@ module.exports = class Section extends Base {
         this.children.sort(Node.compareOrder);
     }
 
-    async getDynamicNodes (items) {
+    async getDynamicNodes (items, params) {
         const result = {};
         if (this.hasDynamicNode) {
             for (const item of items) {
                 if (item.provider) {
-                    result[item.id] = await item.provider.resolveNodes();
+                    result[item.id] = await item.provider.resolveNodes(params);
                 }
             }
         }
