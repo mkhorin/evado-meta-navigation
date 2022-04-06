@@ -31,37 +31,59 @@ module.exports = class BaseProvider extends Base {
         this.labelAttr = this.data.labelAttr || 'name';
         this.descriptionAttr = this.data.descriptionAttr;
         this.baseMeta = this.module.getBaseMeta();
+        this.init();
+    }
+
+    init () {
+        this.setMetaClass();
+        this.setMetaView();
+    }
+
+    setMetaClass () {
+        this.metaClass = this.baseMeta.getClass(this.data.class);
+        if (!this.metaClass) {
+            this.log('error', `Class not found: ${this.data.class}`);
+        }
+    }
+
+    setMetaView () {
+        if (!this.data.view) {
+            this.metaView = this.metaClass;
+            return;
+        }
+        this.metaView = this.metaClass?.getView(this.data.view);
+        if (!this.metaView) {
+            this.log('error', `View not found: ${this.data.view}`);
+        }
     }
 
     async resolveNode (params) {
         const id = params?.request[DynamicNode.OBJECT_ID_PARAM];
         const query = await this.resolveQuery(this.find(), params);
-        const data = await query.byId(id).one();
-        if (data) {
-            return this.createNode(data);
+        if (query) {
+            const data = await query.byId(id).one();
+            if (data) {
+                return this.createNode(data);
+            }
         }
     }
 
     async resolveNodes (params) {
         const query = await this.resolveQuery(this.find(), params);
-        const items = await query.all();
-        return items.map(this.createNode, this);
+        if (query) {
+            const items = await query.all();
+            return items.map(this.createNode, this);
+        }
+        return [];
     }
 
     find () {
-        return this.getView().find().raw();
-    }
-
-    getView () {
-        const cls = this.baseMeta.getClass(this.data.class);
-        return this.data.view
-            ? cls.getView(this.data.view)
-            : cls;
+        return this.metaView?.find().raw();
     }
 
     async resolveQuery (query, params) {
         const rbac = params?.controller?.module.getRbac();
-        if (!rbac) {
+        if (!query || !rbac) {
             return query;
         }
         const access = await this.resolveAccess(rbac, query.view, params);
