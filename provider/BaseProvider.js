@@ -28,7 +28,7 @@ module.exports = class BaseProvider extends Base {
     constructor () {
         super(...arguments);
         this.idAttr = this.data.idAttr || '_id';
-        this.labelAttr = this.data.labelAttr || 'name';
+        this.nameAttr = this.data.nameAttr || 'name';
         this.descriptionAttr = this.data.descriptionAttr;
         this.baseMeta = this.module.getBaseMeta();
         this.init();
@@ -105,8 +105,9 @@ module.exports = class BaseProvider extends Base {
     createNode (data) {
         return new DynamicNode({
             objectId: data[this.idAttr],
-            label: data[this.labelAttr],
+            label: data[this.nameAttr] || data[this.idAttr],
             description: data[this.descriptionAttr],
+            translationKey: this.metaView.translationKey,
             provider: this
         });
     }
