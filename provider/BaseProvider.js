@@ -27,8 +27,8 @@ module.exports = class BaseProvider extends Base {
 
     constructor () {
         super(...arguments);
-        this.idAttr = this.data.idAttr || '_id';
-        this.nameAttr = this.data.nameAttr || 'name';
+        this.idAttr = this.data.idAttr;
+        this.nameAttr = this.data.nameAttr;
         this.descriptionAttr = this.data.descriptionAttr;
         this.baseMeta = this.module.getBaseMeta();
         this.init();
@@ -60,25 +60,24 @@ module.exports = class BaseProvider extends Base {
     async resolveNode (params) {
         const id = params?.request[DynamicNode.OBJECT_ID_PARAM];
         const query = await this.resolveQuery(this.find(), params);
-        if (query) {
-            const data = await query.byId(id).one();
-            if (data) {
-                return this.createNode(data);
-            }
+        if (!query) {
+            return null;
         }
+        const item = await query.byId(id).one();
+        return item ? this.createNode(item) : null;
     }
 
     async resolveNodes (params) {
         const query = await this.resolveQuery(this.find(), params);
-        if (query) {
-            const items = await query.all();
-            return items.map(this.createNode, this);
+        if (!query) {
+            return [];
         }
-        return [];
+        const items = await query.all();
+        return items.map(this.createNode, this);
     }
 
     find () {
-        return this.metaView?.find().raw();
+        return this.metaView?.find();
     }
 
     async resolveQuery (query, params) {
@@ -102,13 +101,23 @@ module.exports = class BaseProvider extends Base {
         }, params);
     }
 
-    createNode (data) {
+    createNode (model) {
+        const id = this.idAttr
+            ? model.get(this.idAttr)
+            : model.getId();
+        const label = this.nameAttr
+            ? model.get(this.nameAttr)
+            : model.header.resolve();
+        const description = this.descriptionAttr
+            ? model.get(this.descriptionAttr)
+            : null;
         return new DynamicNode({
-            objectId: data[this.idAttr],
-            label: data[this.nameAttr] || data[this.idAttr],
-            description: data[this.descriptionAttr],
+            objectId: id,
+            label: label || id,
             translationKey: this.metaView.translationKey,
-            provider: this
+            provider: this,
+            description,
+            model
         });
     }
 
