@@ -19,11 +19,8 @@ module.exports = class DynamicNode extends Base {
         this.id = this.source.id;
         this.name = this.source.name;
         this.data = this.source.data;
+        this.title = this.label;
         this.options = this.source.options;
-    }
-
-    hasDescription () {
-        return this.provider.descriptionAttr;
     }
 
     getParentsChildren () {

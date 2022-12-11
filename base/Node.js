@@ -35,6 +35,7 @@ module.exports = class Node extends Base {
         this.system = this.data.system;
         this.translationKey = `${this.section.translationKey}.${this.name}`;
         this.label = this.createLabel();
+        this.title = this.data.title || this.label;
         this.description = this.data.description;
         this.opened = this.data.opened;
     }

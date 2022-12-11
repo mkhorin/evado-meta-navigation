@@ -41,21 +41,23 @@ module.exports = class BaseSource extends Base {
 
     createBaseServiceNavigation (meta) {
         if (meta) {
-            this.createModelServiceNavigation('_classes', meta.classes.map(item => ({
+            const items = meta.classes.map(item => ({
                 name: item.getName(),
-                label: item.getTitle(),
+                title: item.getTitle(),
                 class: item.getName()
-            })));
+            }));
+            this.createModelServiceNavigation('_classes', items);
         }
     }
 
     createReportServiceNavigation (meta) {
         if (meta) {
-            this.createModelServiceNavigation('_reports', meta.reports.map(item => ({
+            const items = meta.reports.map(item => ({
                 name: item.getName(),
-                label: item.getTitle(),
+                title: item.getTitle(),
                 report: item.getName()
-            })));
+            }));
+            this.createModelServiceNavigation('_reports', items);
         }
     }
 
@@ -73,15 +75,17 @@ module.exports = class BaseSource extends Base {
     }
 
     addSectionServiceNodes (section, parent, nodes) {
-        this._data.nodes.unshift(this.getSectionData({
+        const data = this.getSectionData({
             name: parent,
             type: 'container',
             section
-        }));
-        for (let node of nodes) {
-            node = this.getNodeData({...node, section, parent});
-            node.name = `${parent}-${node.name}`;
-            this._data.nodes.push(node);
+        });
+        this._data.nodes.unshift(data);
+        for (const node of nodes) {
+            const data = this.getNodeData({...node, section, parent});
+            data.name = `${parent}-${node.name}`;
+            data.label = node.name;
+            this._data.nodes.push(data);
         }
     }
 
