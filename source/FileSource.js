@@ -23,16 +23,18 @@ module.exports = class FileSource extends Base {
 
     async loadNavigation () {
         const dir = this.meta.getPath(this.directory);
-        const files = await FileHelper.readDirectory(dir);
-        for (const file of FileHelper.filterJsonFiles(files)) {
+        const names = await FileHelper.readDirectory(dir);
+        const jsonNames = FileHelper.filterJsonFiles(names);
+        for (const name of jsonNames) {
+            const file = path.join(dir, name);
             try {
-                const data = await FileHelper.readJsonFile(path.join(dir, file));
-                data.name = FileHelper.getBasename(file);
+                const data = await FileHelper.readJsonFile(file);
+                data.name = FileHelper.getBasename(name);
                 this.addNodes(data);
                 delete data.nodes;
                 this._data.sections.push(data);
             } catch (err) {
-                this.meta.log('error', `Invalid JSON: ${path.join(dir, file)}`, err);
+                this.meta.log('error', `Invalid JSON: ${file}`, err);
             }
 
         }

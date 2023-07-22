@@ -87,7 +87,8 @@ module.exports = class Node extends Base {
     getParentsChildren () {
         if (!this._parentsChildren) {
             this._parentsChildren = [];
-            for (const parent of this.getParents()) {
+            const parents = this.getParents();
+            for (const parent of parents) {
                 this._parentsChildren.push(...parent.children);
             }
         }
