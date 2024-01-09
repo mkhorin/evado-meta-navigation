@@ -30,8 +30,12 @@ module.exports = class CalcCondition extends Base {
         if (['and', 'or', 'not'].includes(this.data[0])) {
             return this.prepareChildren;
         }
-        const length = this.data.length;
-        return length < 2 ? this.prepareStatic : length === 4 ? this.preparePairValue : this.prepareValue;
+        const {length} = this.data;
+        return length < 2 
+            ? this.prepareStatic 
+            : length === 4 
+                ? this.preparePairValue 
+                : this.prepareValue;
     }
 
     prepareStatic () {
@@ -51,7 +55,9 @@ module.exports = class CalcCondition extends Base {
         const field = this.normalizeFieldItem(0, data);
         this._field = field;
         this._value = this.createToken(data[1], {field});
-        return this._value.isStatic() ? this.resolveStatic : this.resolveValue;
+        return this._value.isStatic() 
+            ? this.resolveStatic 
+            : this.resolveValue;
     }
 
     preparePairValue (data) {

@@ -9,7 +9,7 @@ module.exports = class ObjectFilter extends Base {
 
     static create (data, node, params) {
         if (data) {
-            const module = node.section.meta.module;
+            const {module} = node.section.meta;
             const config = this.prepareSpawn(data, module);
             return ClassHelper.spawn(config, {...params, module, node});
         }
